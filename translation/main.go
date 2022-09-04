@@ -9,12 +9,31 @@ import (
 	"github.com/go-playground/validator/v10"
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
+	"reflect"
+	"strings"
 )
 
 var trans ut.Translator
 
+func removeTopStruct(fileds map[string]string) map[string]string {
+	rsp := map[string]string{}
+	for field, err := range fileds {
+		rsp[field[strings.Index(field, ".")+1:]] = err
+	}
+	return rsp
+}
+
 func InitTranslation(locale string) (err error) {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		// 注册一个获取 json 的 tag 的自定义方法
+		v.RegisterTagNameFunc(func(field reflect.StructField) string {
+			name := strings.SplitN(field.Tag.Get("json"), ",", 2)[0]
+			if name == "-" {
+				return ""
+			}
+			return name
+		})
+
 		zhT := zh.New() //中文翻译器
 		enT := en.New() //英文翻译器
 		//第一个参数是备用的语言环境，后面的参数是应该支持的语言环境
@@ -37,6 +56,9 @@ func InitTranslation(locale string) (err error) {
 	return
 }
 
-// 使用
+// 翻译使用
 // errs,_ := err.(validator.ValidationErrors)
 // errs.Translate(trans)
+
+// 去掉.之前单词
+// removeTopStruct（errs.Translate(trans)）
