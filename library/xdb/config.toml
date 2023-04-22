@@ -1,0 +1,29 @@
+# HTTP Server
+[server]
+	Address     = ":8199"
+	ServerRoot  = "public"
+	ServerAgent = "cc_center"
+	LogPath     = "/tmp/log/dgqd/server"
+
+# Logger.
+[logger]
+    Path        = "/tmp/log/dgqd"
+    Level       = "all"
+    Stdout      = true
+
+# Template.
+[viewer]
+    Path        = "template"
+    DefaultFile = "index.html"
+    Delimiters  =  ["{{", "}}"]
+
+# Database.
+[database]
+#    link  = "root:steven2.0@tcp(127.0.0.1:3306)/dgqd?charset=utf8mb4&parseTime=True&loc=Local"
+    debug = true
+    # Database logger.
+    [database.logger]
+        Path   = "/tmp/log/cc_center/sql"
+        Level  = "all"
+        Stdout = true
+

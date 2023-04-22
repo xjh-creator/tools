@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<title>微信登录</title>
+	<link href="https://res.wx.qq.com/connect/zh_CN/htmledition/images/favicon3696b4.ico" rel="Shortcut Icon">
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.3.0/weui.min.css" />
+	<script type="text/javascript" src="https://res.wx.qq.com/t/wx_fed/cdn_libs/res/weui/1.2.8/weui.min.js"></script>
+	<script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/jquery.min3696b4.js"></script>
+	<style>.body {background-color: var(--weui-BG-0);}</style>
+</head>
+
+<body>
+	<script>
+		!function () {
+			weui.confirm('是否授权登录管理后台', {
+				title: '授权登录',
+				buttons: [{
+					label: '取消',
+					type: 'primary',
+					onClick: function () {
+						jQuery.ajax({
+							type: "GET",
+							url: "{{CancelUrl}}",
+						})
+						//window.location.href = '{{CancelUrl}}';
+						WeixinJSBridge.call('closeWindow');
+					}
+				}, {
+					label: '确定',
+					type: 'primary',
+					onClick: function () {
+						window.location.href = '{{AuthorizeUrl}}';
+					}
+				}]
+			});
+			$(".weui-dialog").removeClass("weui-skin_android");
+		}()
+	</script>
+</body>
+
+</html>
